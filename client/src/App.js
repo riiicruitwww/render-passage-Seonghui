@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import { connect } from 'react-redux';
-import { PassagesContainer, QuestionContainer, ResultContainer } from './container'
+import { QuestionContainer, PassageContainer } from './container'
 import * as taskActions from './store/task';
 import { bindActionCreators } from 'redux';
 
@@ -11,14 +11,20 @@ class App extends Component {
     TaskActions.fetchTask();
   }
   render() {
-    const { TaskActions, showResult, userAnswers } = this.props;
+    const { TaskActions, showResult, userAnswers, isLoading } = this.props;
     return (
       <div className="App">
         <div className="container">
           <div className="wrapper question-wrapper">
             <h2>Question</h2>
-            <QuestionContainer type="passage" />
-            <QuestionContainer type="choice" />
+            {isLoading && 'loading...'}
+            {!isLoading && (
+              <>
+                <PassageContainer type="title" />
+                <QuestionContainer type="passage" />
+                <QuestionContainer type="choice" />
+              </>
+            )}
           </div>
 
 
@@ -29,13 +35,13 @@ class App extends Component {
                 onClick={TaskActions.setResult}
                 disabled={Object.keys(userAnswers).length < 4}
               >
-                  결과 확인하기
+                결과 확인하기
                 </button>
             )}
             {showResult && (
               <>
                 <QuestionContainer type="passage_kr" />
-                <ResultContainer type="vocabularies" />
+                <PassageContainer type="vocabularies" />
               </>
             )}
           </div>
@@ -46,10 +52,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  taskData: state.task.data,
   answers: state.task.answers,
   userAnswers: state.task.userAnswers,
   showResult: state.task.showResult,
+  isLoading: state.task.isLoading,
 });
 
 const mapDispatchToProps = dispatch => ({

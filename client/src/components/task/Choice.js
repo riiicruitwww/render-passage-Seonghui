@@ -6,16 +6,18 @@ const Choice = ({ chunk, answers, userAnswers, showResult, segment, taskData, nu
     onClickUserAnswer(id, number)
   }
   const setClass = (currentNumber) => {
+    const classList = []
+    const selected = userAnswers[id] === currentNumber ? 'selected' : ''
     if (showResult) {
-      const classList = []
       const correction = userAnswers[id] === answers[id] ? 'correct' : 'incorrect'
       const answer = number === answers[id] ? 'answer' : 'not-answer'
-      const selected = userAnswers[id] === currentNumber ? 'selected' : ''
       classList.push(correction)
       classList.push(answer)
       classList.push(selected)
       return classList.join(' ')
     }
+    classList.push(selected)
+    return classList.join(' ')
   }
   return (
     <li

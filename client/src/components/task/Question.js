@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Question = ({ chunk, segment, taskData }) => {
+const Question = ({ chunk, taskData }) => {
   return (
     <p>{taskData.chunk_map[chunk].text_en}</p>
   )

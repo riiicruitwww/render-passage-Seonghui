@@ -16,10 +16,10 @@ const Blank = ({ item, type, id }) => {
       />
     })
   })
-  return <div>{list}</div>
+  return <p>{list}</p>
 };
 
-const QuestionArea = ({ item, taskData }) => {
+const QuestionArea = ({ item }) => {
   const list = item.children.map((item) => {
     return item.children.map((item, index) => {
       return <Question key={index} chunk={item.chunk_id} />
@@ -28,7 +28,7 @@ const QuestionArea = ({ item, taskData }) => {
   return <div>{list}</div>
 };
 
-const ChoiceArea = ({ item, taskData, id, TaskActions }) => {
+const ChoiceArea = ({ item, id, TaskActions }) => {
   const answers = ['a', 'b', 'c', 'd']
   const handleClickUserAnswer = (id, number) => {
     TaskActions.setUserAnswers({
@@ -52,7 +52,7 @@ const ChoiceArea = ({ item, taskData, id, TaskActions }) => {
   return <ol type="a">{list}</ol>
 };
 
-const RenderQuestion = ({ data, type, id, index, number, taskData, TaskActions, answers, userAnswers }) => {
+const RenderQuestion = ({ data, type, id, taskData, TaskActions }) => {
 
   return (
     <>
@@ -86,6 +86,8 @@ const RenderQuestion = ({ data, type, id, index, number, taskData, TaskActions, 
                 TaskActions={TaskActions}
               />
           }
+          default:
+            return null;
         }
       })
       }
@@ -95,7 +97,6 @@ const RenderQuestion = ({ data, type, id, index, number, taskData, TaskActions, 
 
 const mapStateToProps = state => ({
   taskData: state.task.data,
-  isLoading: state.task.isLoading,
   answers: state.task.answers,
   userAnswers: state.task.userAnswers
 });
