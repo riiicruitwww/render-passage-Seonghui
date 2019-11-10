@@ -5,24 +5,19 @@ import { bindActionCreators } from 'redux';
 import { RenderQuestion } from '../components/base'
 
 
-class QuestionContainer extends Component {
+class ResultContainer extends Component {
   render() {
     const { taskData, isLoading, TaskActions, type } = this.props;
     return (
       <div className={type}>
         {!isLoading && (
-          taskData.questions.map((item, index) => {
-            // 정답
-            TaskActions.setAnswers({
-              id: item.id,
-              answer: item.correct_answer
-            })
-            return <RenderQuestion
-              key={index}
-              id={index}
-              data={item}
-              type={type}
-            />
+          taskData.passage_box.vocabularies.map((item, index) => {
+            return (
+              <div key={index}>
+                {item.word}
+                {item.meaning}
+              </div>
+            )
           })
         )}
       </div>
@@ -43,4 +38,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(QuestionContainer);
+)(ResultContainer);

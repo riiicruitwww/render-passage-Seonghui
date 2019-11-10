@@ -1,15 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const Choice = ({ chunk, answers, userAnswers, segment, taskData, number, id, UserAnswer, onClickUserAnswer }) => {
+const Choice = ({ chunk, answers, userAnswers, showResult, segment, taskData, number, id, UserAnswer, onClickUserAnswer }) => {
   const _onClick = (id, number) => {
     onClickUserAnswer(id, number)
   }
+  const setClass = (currentNumber) => {
+    if (showResult) {
+      const classList = []
+      const correction = userAnswers[id] === answers[id] ? 'correct' : 'incorrect'
+      const answer = number === answers[id] ? 'answer' : 'not-answer'
+      const selected = userAnswers[id] === currentNumber ? 'selected' : ''
+      classList.push(correction)
+      classList.push(answer)
+      classList.push(selected)
+      return classList.join(' ')
+    }
+  }
   return (
-    <p onClick={() => _onClick(id, number)}>
-      {number === answers[id] ? '정답' : '낫 정답'}
+    <li
+      onClick={() => _onClick(id, number)}
+      className={setClass(number)}
+    >
       {taskData.chunk_map[chunk].text_en}
-    </p>
+    </li>
   )
 }
 
@@ -17,6 +31,7 @@ const mapStateToProps = state => ({
   taskData: state.task.data,
   answers: state.task.answers,
   userAnswers: state.task.userAnswers,
+  showResult: state.task.showResult,
 });
 
 export default connect(

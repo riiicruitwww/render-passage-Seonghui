@@ -4,14 +4,15 @@ import * as taskActions from '../../store/task';
 import { bindActionCreators } from 'redux';
 import { Passage, Choice, Question } from '../task'
 
-const Blank = ({ item, taskData }) => {
+const Blank = ({ item, type, id }) => {
   const list = item.children.map((chunkRef) => {
     return chunkRef.children.map((segment, index) => {
       return <Passage
         key={index}
-        index={index}
+        id={id}
         chunk={chunkRef.chunk_id}
         segment={segment.data}
+        type={type}
       />
     })
   })
@@ -48,43 +49,47 @@ const ChoiceArea = ({ item, taskData, id, TaskActions }) => {
       })
     })
   })
-  return <ul>{list}</ul>
+  return <ol type="a">{list}</ol>
 };
 
-const RenderQuestion = ({ data, choice, number, taskData, TaskActions, answers, userAnswers }) => {
+const RenderQuestion = ({ data, type, id, index, number, taskData, TaskActions, answers, userAnswers }) => {
 
   return (
-    <ul>
-      {userAnswers[data.id] === answers[data.id] ? '맞았습니다' : '틀렸습니다'}
+    <>
       {data.view_tree.children.map((item, index) => {
         switch (item.name) {
           case 'blank': {
-            return <Blank
-              key={index}
-              item={item}
-              taskData={taskData}
-            />
+            return (type === 'passage' || type === 'passage_kr') &&
+              <Blank
+                key={index}
+                id={id}
+                item={item}
+                taskData={taskData}
+                type={type}
+              />
           }
           case 'question_area': {
-            return <QuestionArea
-              key={index}
-              item={item}
-              taskData={taskData}
-            />
+            return type === 'question' &&
+              <QuestionArea
+                key={index}
+                item={item}
+                taskData={taskData}
+              />
           }
           case 'choice_area': {
-            return <ChoiceArea
-              key={index}
-              item={item}
-              taskData={taskData}
-              id={data.id}
-              TaskActions={TaskActions}
-            />
+            return type === 'choice' &&
+              <ChoiceArea
+                key={index}
+                item={item}
+                taskData={taskData}
+                id={data.id}
+                TaskActions={TaskActions}
+              />
           }
         }
       })
       }
-    </ul>
+    </>
   )
 }
 
